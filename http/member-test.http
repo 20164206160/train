@@ -22,7 +22,7 @@ mobile = 13765846584
 
 ###
 
-POST http://localhost:8082/member/member/login
+POST http://localhost:8000/member/member/login
 Content-Type: application/json
 
 {

@@ -18,8 +18,30 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/main.vue'),
     meta: {
       loginRequire: true
-    }
-  }
+    },
+    childre:[
+      {
+        path: 'welcome',
+        component: () => import('../views/main/welcome.vue'),
+      },
+      {
+        path: 'passenger',
+        component: () => import('../views/main/passenger.vue'),
+      },
+      {
+        path: 'ticket',
+        component: () => import('../views/main/ticket.vue'),
+      },
+      {
+        path: 'order',
+        component: () => import('../views/main/order.vue'),
+      }
+    ]
+  },
+  {
+    path: '',
+    redirect: '/welcome'
+  },
 ]
 
 const router = createRouter({

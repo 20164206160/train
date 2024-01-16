@@ -30,12 +30,19 @@ public class PassengerService {
     private PassengerMapper passengerMapper;
     public void save(PassengerSaveReq passengerSaveReq){
         Passenger passenger = BeanUtil.copyProperties(passengerSaveReq, Passenger.class);
-        passenger.setMemberId(LoginMemberContext.getId());
-        passenger.setId(SnowUtil.getSnowflakeNextId());
         DateTime now = DateTime.now();
-        passenger.setCreateTime(now);
-        passenger.setUpdateTime(now);
-        passengerMapper.insert(passenger);
+        //保存
+        if(ObjectUtil.isNull(passenger.getId())){
+            passenger.setMemberId(LoginMemberContext.getId());
+            passenger.setId(SnowUtil.getSnowflakeNextId());
+            passenger.setCreateTime(now);
+            passenger.setUpdateTime(now);
+            passengerMapper.insert(passenger);
+        }else {
+            //更新
+            passenger.setUpdateTime(now);
+            passengerMapper.updateByPrimaryKey(passenger);
+        }
     }
 
     public PageResp<PassengerQueryResp> queryList(PassengerQueryReq passengerQueryReq){
@@ -61,5 +68,9 @@ public class PassengerService {
         pageResp.setList(passengerQueryResps);
 
         return pageResp;
+    }
+
+    public void delete(Long id) {
+        passengerMapper.deleteByPrimaryKey(id);
     }
 }

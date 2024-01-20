@@ -1,8 +1,8 @@
 package com.study.train.${module}.controller.admin;
 
 import com.study.train.common.context.LoginMemberContext;
-import com.study.train.common.resp.CommonResp;
-import com.study.train.common.resp.PageResp;
+import com.study.train.common.response.CommonResp;
+import com.study.train.common.response.PageResp;
 import com.study.train.${module}.req.${Domain}QueryReq;
 import com.study.train.${module}.req.${Domain}SaveReq;
 import com.study.train.${module}.resp.${Domain}QueryResp;

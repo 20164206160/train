@@ -1,0 +1,27 @@
+GET http://localhost:8084/batch/hello
+Accept: application/json
+
+###
+POST http://localhost:8084/batch/admin/job/add
+Content-Type: application/json
+
+{
+  "name": "com.study.train.batch.job.TestJob",
+  "jobGroupName": "default",
+  "cronExpression": "*/2 * * * * ?",
+  "desc": "test job"
+}
+
+###
+POST http://localhost:8084/batch/admin/job/pause
+Content-Type: application/json
+
+{
+  "name": "com.study.train.batch.job.TestJob",
+  "jobGroupName": "default"
+}
+
+###
+POST http://localhost:8084/batch/admin/job/query
+Accept: application/json
+

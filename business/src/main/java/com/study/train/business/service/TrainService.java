@@ -91,9 +91,12 @@ public class TrainService {
      * @return
      */
     public List<TrainQueryResp> queryAll() {
+        return BeanUtil.copyToList(selectAll(), TrainQueryResp.class);
+    }
+
+    public List<Train> selectAll() {
         TrainExample trainExample = new TrainExample();
         trainExample.setOrderByClause("code asc");
-        List<Train> trainList = trainMapper.selectByExample(trainExample);
-        return BeanUtil.copyToList(trainList, TrainQueryResp.class);
+        return trainMapper.selectByExample(trainExample);
     }
 }

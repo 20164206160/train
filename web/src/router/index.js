@@ -1,48 +1,42 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import store from "@/store";
+import {notification} from "ant-design-vue";
 
-const routes = [
-  {
+const routes = [{
     path: '/login',
-    name: 'login',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/login.vue')
-  },
-  {
+    component: () => import('../views/login.vue')
+  }, {
     path: '/',
-    name: 'main',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/main.vue'),
+    component: () => import('../views/main.vue'),
     meta: {
       loginRequire: true
     },
-    childre:[
-      {
-        path: 'welcome',
-        component: () => import('../views/main/welcome.vue'),
-      },
-      {
-        path: 'passenger',
-        component: () => import('../views/main/passenger.vue'),
-      },
-      {
-        path: 'ticket',
-        component: () => import('../views/main/ticket.vue'),
-      },
-      {
-        path: 'order',
-        component: () => import('../views/main/order.vue'),
-      }
-    ]
-  },
-  {
+    children: [{
+      path: 'welcome',
+      component: () => import('../views/main/welcome.vue'),
+    }, {
+      path: 'passenger',
+      component: () => import('../views/main/passenger.vue'),
+    }, {
+      path: 'ticket',
+      component: () => import('../views/main/ticket.vue'),
+    }, {
+      path: 'order',
+      component: () => import('../views/main/order.vue'),
+    }, {
+      path: 'my-ticket',
+      component: () => import('../views/main/my-ticket.vue')
+    }, {
+      path: 'seat',
+      component: () => import('../views/main/seat.vue')
+    }, {
+      path: 'admin',
+      component: () => import('../views/main/admin.vue')
+    }]
+  }, {
     path: '',
     redirect: '/welcome'
-  },
-]
+  }];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),

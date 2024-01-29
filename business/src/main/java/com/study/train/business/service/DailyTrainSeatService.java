@@ -8,10 +8,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.study.train.business.domain.DailyTrainSeat;
-import com.study.train.business.domain.DailyTrainSeatExample;
-import com.study.train.business.domain.TrainSeat;
-import com.study.train.business.domain.TrainStation;
+import com.study.train.business.domain.*;
 import com.study.train.business.mapper.DailyTrainSeatMapper;
 import com.study.train.business.req.DailyTrainSeatQueryReq;
 import com.study.train.business.req.DailyTrainSeatSaveReq;
@@ -22,6 +19,7 @@ import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -84,6 +82,7 @@ public class DailyTrainSeatService {
         dailyTrainSeatMapper.deleteByPrimaryKey(id);
     }
 
+    @Transactional
     public void genDaily(Date date, String trainCode){
         LOG.info("生成日期【{}】车次【{}】的座位信息开始", DateUtil.formatDate(date), trainCode);
         //删除某日某车次的座位信息
@@ -115,4 +114,18 @@ public class DailyTrainSeatService {
         LOG.info("生成日期【{}】车次【{}】的座位信息结束", DateUtil.formatDate(date), trainCode);
     }
 
+    //获取对应seatType的座位数,-1表示没有这个座位类型
+    public int countSeat(Date date, String trainCode, String seatType){
+        DailyTrainSeatExample example = new DailyTrainSeatExample();
+        example.createCriteria().andDateEqualTo(date).andTrainCodeEqualTo(trainCode).andSeatTypeEqualTo(seatType);
+        long l = dailyTrainSeatMapper.countByExample(example);
+        return l==0?-1:(int)l;
+    }
+
+    public List<DailyTrainSeat> selecetByCarriage(Date date, String trainCode, Integer carriageIndex){
+        DailyTrainSeatExample example = new DailyTrainSeatExample();
+        example.setOrderByClause("carriage_seat_index asc");
+        example.createCriteria().andDateEqualTo(date).andTrainCodeEqualTo(trainCode).andCarriageIndexEqualTo(carriageIndex);
+        return dailyTrainSeatMapper.selectByExample(example);
+    }
 }

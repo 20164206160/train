@@ -3,7 +3,7 @@ Accept: application/json
 
 ###
 
-GET http://localhost:8000/member/hello
+GET http://localhost:18082/member/hello
 Accept: application/json
 
 ###

@@ -2,6 +2,9 @@ GET http://localhost:8083/business/admin/train/gen-seat/{{trainCode}}
 Accept: application/json
 
 ###
-
 GET http://localhost:8083/business/hello
+Accept: application/json
+
+###
+GET http://localhost:8083/business/admin/train/query-all
 Accept: application/json

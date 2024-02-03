@@ -8,7 +8,10 @@ import cn.hutool.core.util.EnumUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.study.train.business.domain.*;
+import com.study.train.business.domain.DailyTrain;
+import com.study.train.business.domain.DailyTrainTicket;
+import com.study.train.business.domain.DailyTrainTicketExample;
+import com.study.train.business.domain.TrainStation;
 import com.study.train.business.enums.SeatTypeEnum;
 import com.study.train.business.enums.TrainTypeEnum;
 import com.study.train.business.mapper.DailyTrainTicketMapper;
@@ -20,6 +23,8 @@ import com.study.train.common.util.SnowUtil;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,7 +61,38 @@ public class DailyTrainTicketService {
         }
     }
 
+    /**
+     *  缓存过期，缓存机器坏了热点key没有了（缓存失败）
+     *  缓存过期 可以在缓存过期前主动更新缓存
+     *  缓存失败，分布式锁+快速失败
+     * @param req
+     * @return
+     */
+    @Cacheable(value = "DailyTrainTicketService.queryList3")
+    public PageResp<DailyTrainTicketQueryResp> queryList3(DailyTrainTicketQueryReq req) {
+        LOG.info("测试缓存击穿");
+        return null;
+    }
+
+    //springboot内置缓存Cacheable, 强制刷新缓存CachePut
+    @CachePut(value = "DailyTrainTicketService.queryList")
+    public PageResp<DailyTrainTicketQueryResp> queryList2(DailyTrainTicketQueryReq req) {
+        return queryList(req);
+    }
+    @Cacheable(value = "DailyTrainTicketService.queryList")
     public PageResp<DailyTrainTicketQueryResp> queryList(DailyTrainTicketQueryReq req) {
+        // 常见的缓存过期策略
+        // TTL 超时时间
+        // LRU 最近最少使用
+        // LFU 最近最不经常使用
+        // FIFO 先进先出
+        // Random 随机淘汰策略
+        // []去缓存里取数据，因数据库本身就没数据而造成缓存穿透
+        // if (有数据) { null []
+        //     return
+        // } else {
+        //     去数据库取数据
+        // }
         DailyTrainTicketExample dailyTrainTicketExample = new DailyTrainTicketExample();
         dailyTrainTicketExample.setOrderByClause("id desc");
         DailyTrainTicketExample.Criteria criteria = dailyTrainTicketExample.createCriteria();

@@ -67,6 +67,9 @@ public class ConfirmOrderService {
      @Autowired
      private RedissonClient redissonClient;
 
+     @Resource
+     private SkTokenService skTokenService;
+
     public void save(ConfirmOrderDoReq req) {
         DateTime now = DateTime.now();
         ConfirmOrder confirmOrder = BeanUtil.copyProperties(req, ConfirmOrder.class);
@@ -111,6 +114,16 @@ public class ConfirmOrderService {
     //public synchronized void doConfirm(ConfirmOrderDoReq req) {
     @SentinelResource(value = "doConfirm", blockHandler = "doConfirmBlock")
     public void doConfirm(ConfirmOrderDoReq req) {
+
+         // 校验令牌余量
+         boolean validSkToken = skTokenService.validSkToken(req.getDate(), req.getTrainCode(), LoginMemberContext.getId());
+         if (validSkToken) {
+             LOG.info("令牌校验通过");
+         } else {
+             LOG.info("令牌校验不通过");
+             throw new BusinessException(BusinessExceptionEnum.CONFIRM_ORDER_SK_TOKEN_FAIL);
+         }
+
         // 获取分布式锁
         String lockKey = RedisKeyPreEnum.CONFIRM_ORDER + "-" + DateUtil.formatDate(req.getDate()) + "-" + req.getTrainCode();
         // setIfAbsent就是对应redis的setnx

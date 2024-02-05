@@ -42,6 +42,6 @@
                              type="XMLMAPPER"/>
 
 <!--        <table tableName="station" domainObjectName="Station"/>-->
-        <table tableName="confirm_order" domainObjectName="ConfirmOrder"/>
+        <table tableName="sk_token" domainObjectName="SkToken"/>
     </context>
 </generatorConfiguration>

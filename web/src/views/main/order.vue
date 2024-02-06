@@ -430,7 +430,7 @@ export default defineComponent({
             notification.error({description: data.message});
           }
         });
-      }, 500);
+      }, 2000);
     };
 
     /* ------------------- 第二层验证码 --------------------- */

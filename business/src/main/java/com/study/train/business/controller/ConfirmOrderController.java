@@ -66,6 +66,16 @@ public class ConfirmOrderController {
     }
 
     /**
+     * 取消抢票
+     * @param id
+     * @return
+     */
+    @GetMapping("/cancel/{id}")
+    public CommonResp<Integer> cancel(@PathVariable Long id) {
+        Integer count = confirmOrderService.cancel(id);
+        return new CommonResp<>(count);
+    }
+    /**
      * 降级方法，需包含限流方法的所有参数和BlockException参数(返回值和参数必须和原方法一致)
      * @param req
      * @param e

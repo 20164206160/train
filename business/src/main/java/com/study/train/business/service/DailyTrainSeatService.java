@@ -8,11 +8,16 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.study.train.business.domain.*;
+import com.study.train.business.domain.DailyTrainSeat;
+import com.study.train.business.domain.DailyTrainSeatExample;
+import com.study.train.business.domain.TrainSeat;
+import com.study.train.business.domain.TrainStation;
 import com.study.train.business.mapper.DailyTrainSeatMapper;
 import com.study.train.business.req.DailyTrainSeatQueryReq;
 import com.study.train.business.req.DailyTrainSeatSaveReq;
+import com.study.train.business.req.SeatSellReq;
 import com.study.train.business.resp.DailyTrainSeatQueryResp;
+import com.study.train.business.resp.SeatSellResp;
 import com.study.train.common.response.PageResp;
 import com.study.train.common.util.SnowUtil;
 import jakarta.annotation.Resource;
@@ -134,5 +139,20 @@ public class DailyTrainSeatService {
         example.setOrderByClause("carriage_seat_index asc");
         example.createCriteria().andDateEqualTo(date).andTrainCodeEqualTo(trainCode).andCarriageIndexEqualTo(carriageIndex);
         return dailyTrainSeatMapper.selectByExample(example);
+    }
+
+    /**
+     * 查询某日某车次的所有座位
+     */
+    public List<SeatSellResp> querySeatSell(SeatSellReq req) {
+        Date date = req.getDate();
+        String trainCode = req.getTrainCode();
+        LOG.info("查询日期【{}】车次【{}】的座位销售信息", DateUtil.formatDate(date), trainCode);
+        DailyTrainSeatExample dailyTrainSeatExample = new DailyTrainSeatExample();
+        dailyTrainSeatExample.setOrderByClause("`carriage_index` asc, carriage_seat_index asc");
+        dailyTrainSeatExample.createCriteria()
+                .andDateEqualTo(date)
+                .andTrainCodeEqualTo(trainCode);
+        return BeanUtil.copyToList(dailyTrainSeatMapper.selectByExample(dailyTrainSeatExample), SeatSellResp.class);
     }
 }

@@ -2,6 +2,7 @@ package com.study.train.common.util;
 
 import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateTime;
+import cn.hutool.crypto.GlobalBouncyCastleProvider;
 import cn.hutool.json.JSONObject;
 import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTPayload;
@@ -21,6 +22,7 @@ public class JwtUtil {
     private static final String key = "lixiang12306";
 
     public static String createToken(Long id, String mobile) {
+        GlobalBouncyCastleProvider.setUseBouncyCastle(false);
         DateTime now = DateTime.now();
         DateTime expTime = now.offsetNew(DateField.HOUR, 24);
         Map<String, Object> payload = new HashMap<>();
@@ -39,6 +41,7 @@ public class JwtUtil {
     }
 
     public static boolean validate(String token) {
+        GlobalBouncyCastleProvider.setUseBouncyCastle(false);
         JWT jwt = JWTUtil.parseToken(token).setKey(key.getBytes());
         // validate包含了verify
         boolean validate = jwt.validate(0);
@@ -47,6 +50,7 @@ public class JwtUtil {
     }
 
     public static JSONObject getJSONObject(String token) {
+        GlobalBouncyCastleProvider.setUseBouncyCastle(false);
         JWT jwt = JWTUtil.parseToken(token).setKey(key.getBytes());
         JSONObject payloads = jwt.getPayloads();
         payloads.remove(JWTPayload.ISSUED_AT);

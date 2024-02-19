@@ -1,5 +1,12 @@
 # 12306 模拟火车购票系统
 
+## 前台页面
+![image](https://github.com/20164206160/train/assets/26060329/e18c457d-1d31-4858-988a-266d0c57d861)
+![image](https://github.com/20164206160/train/assets/26060329/4588c47f-8728-4398-9c4e-848b3a368dcd)
+
+## 后台页面
+![image](https://github.com/20164206160/train/assets/26060329/5b989606-28a2-4726-96fb-31680dbc21d1)
+
 ## 高并发技术：
 ![image](https://github.com/20164206160/train/assets/26060329/7a37ad07-6e57-4b29-b9ce-a5711b46ec70)
 
